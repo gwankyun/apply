@@ -65,6 +65,7 @@ TEST_CASE("msgpack::type::tuple", "[lite::apply]")
     REQUIRE(lite::apply(f9, msgpack::type::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
 }
 
+#if APPLY_HAS_CXX_11
 TEST_CASE("std::tuple", "[lite::apply]")
 {
     REQUIRE(lite::apply(f1, std::make_tuple(1)) == 1);
@@ -76,19 +77,6 @@ TEST_CASE("std::tuple", "[lite::apply]")
     REQUIRE(lite::apply(f7, std::make_tuple(1, 2, 3, 4, 5, 6, 7)) == 28);
     REQUIRE(lite::apply(f8, std::make_tuple(1, 2, 3, 4, 5, 6, 7, 8)) == 36);
     REQUIRE(lite::apply(f9, std::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
-}
-
-TEST_CASE("boost::tuple", "[lite::apply]")
-{
-    REQUIRE(lite::apply(f1, boost::make_tuple(1)) == 1);
-    REQUIRE(lite::apply(f2, boost::make_tuple(1, 2)) == 3);
-    REQUIRE(lite::apply(f3, boost::make_tuple(1, 2, 3)) == 6);
-    REQUIRE(lite::apply(f4, boost::make_tuple(1, 2, 3, 4)) == 10);
-    REQUIRE(lite::apply(f5, boost::make_tuple(1, 2, 3, 4, 5)) == 15);
-    REQUIRE(lite::apply(f6, boost::make_tuple(1, 2, 3, 4, 5, 6)) == 21);
-    REQUIRE(lite::apply(f7, boost::make_tuple(1, 2, 3, 4, 5, 6, 7)) == 28);
-    REQUIRE(lite::apply(f8, boost::make_tuple(1, 2, 3, 4, 5, 6, 7, 8)) == 36);
-    REQUIRE(lite::apply(f9, boost::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
 }
 
 TEST_CASE("std::array", "[lite::apply]")
@@ -111,6 +99,20 @@ TEST_CASE("std::array", "[lite::apply]")
     REQUIRE(lite::apply(f8, a8) == 36);
     std::array<int, 9> a9{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     REQUIRE(lite::apply(f9, a9) == 45);
+}
+#endif // APPLY_HAS_CXX_11
+
+TEST_CASE("boost::tuple", "[lite::apply]")
+{
+    REQUIRE(lite::apply(f1, boost::make_tuple(1)) == 1);
+    REQUIRE(lite::apply(f2, boost::make_tuple(1, 2)) == 3);
+    REQUIRE(lite::apply(f3, boost::make_tuple(1, 2, 3)) == 6);
+    REQUIRE(lite::apply(f4, boost::make_tuple(1, 2, 3, 4)) == 10);
+    REQUIRE(lite::apply(f5, boost::make_tuple(1, 2, 3, 4, 5)) == 15);
+    REQUIRE(lite::apply(f6, boost::make_tuple(1, 2, 3, 4, 5, 6)) == 21);
+    REQUIRE(lite::apply(f7, boost::make_tuple(1, 2, 3, 4, 5, 6, 7)) == 28);
+    REQUIRE(lite::apply(f8, boost::make_tuple(1, 2, 3, 4, 5, 6, 7, 8)) == 36);
+    REQUIRE(lite::apply(f9, boost::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
 }
 
 TEST_CASE("std::pair", "[lite::apply]")

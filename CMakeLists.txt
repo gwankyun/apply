@@ -23,13 +23,15 @@ find_package(apply REQUIRED)
 # 編譯器選項
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/W4;/MP;/Zc:__cplusplus;>")
 
+add_compile_definitions("APPLY_HAS_CXX_11=1;")
+
 set(apply apply)
 add_executable(${apply})
 target_sources(${apply} PRIVATE
   src/main.cpp
   include/apply.hpp
   include/apply/preprocessor.hpp
-  cmake/findapply.cmake)
+  cmake/Findapply.cmake)
 target_link_libraries(${apply} PUBLIC apply::apply)
 
 # 如果找到Catch2就添加測試

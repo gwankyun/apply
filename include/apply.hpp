@@ -1,6 +1,7 @@
 #pragma once
 #include <utility>
 #include <boost/utility/result_of.hpp>
+#include "apply/preprocessor.hpp" // BOOST_PP_*
 
 #ifndef APPLY_HAS_CXX_11
 #  if __cplusplus >= 201103L || (defined(__cpp_variadic_templates) && defined(__cpp_rvalue_references))
@@ -24,20 +25,67 @@
 #  endif // __cpp_rvalue_references
 #endif // !RVALUE_REF
 
-#include <msgpack.hpp> // msgpack::type::*
-#include <boost/function.hpp> // boost::function
-#include <boost/tuple/tuple.hpp> // boost::tuple boost::make_tuple boost::get
-#include "apply/preprocessor.hpp" // BOOST_PP_*
+#ifndef APPLY_USE_MSGPACK_TUPLE
+#  define APPLY_USE_MSGPACK_TUPLE 1
+#endif // !APPLY_USE_MSGPACK_TUPLE
 
-#ifndef APPLY_MSGPACK_GET
-#  define APPLY_MSGPACK_GET(_, n, x) x##n x##n##_(msgpack::type::get<n>(tpl)); // T0 T0_(msgpack::type::get<0>(tpl));
-#endif // !APPLY_MSGPACK_GET
+#ifndef APPLY_USE_BOOST_TUPLE
+#  define APPLY_USE_BOOST_TUPLE 1
+#endif // !APPLY_USE_BOOST_TUPLE
 
-#ifndef APPLY_BOOST_GET_TUPLE
-#  define APPLY_BOOST_GET_TUPLE(_, n, x) x##n x##n##_(boost::get<n>(tuple_)); // T0 T0_(boost::get<0>(tuple_));
-#endif // !APPLY_BOOST_GET_TUPLE
+
+#if APPLY_USE_MSGPACK_TUPLE
+
+#  include <msgpack.hpp> // msgpack::type::*
+
+#  ifndef APPLY_MSGPACK_GET
+#    define APPLY_MSGPACK_GET(_, n, x) x##n x##n##_(msgpack::type::get<n>(tuple_)); // T0 T0_(msgpack::type::get<0>(tpl));
+#  endif // !APPLY_MSGPACK_GET
+
+#  ifndef APPLY_MSGPACK_TUPLE
+#    define APPLY_MSGPACK_TUPLE(z, n, _) \
+    template< \
+        typename F BOOST_PP_COMMA_IF(n) \
+        BOOST_PP_REPEAT_TYPENAME(z, n, T)> \
+    inline typename boost::result_of<F(BOOST_PP_REPEAT_TYPE(z, n, T))>::type apply(\
+        F f BOOST_PP_COMMA_IF(n) \
+        msgpack::type::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)> tuple_) \
+    { \
+        BOOST_PP_REPEAT_Z(z, n, APPLY_MSGPACK_GET, T) \
+        return f(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
+    }
+#  endif // !APPLY_MSGPACK_TUPLE
+
+#endif // APPLY_USE_MSGPACK_TUPLE
+
+
+#if APPLY_USE_BOOST_TUPLE
+
+#  include <boost/tuple/tuple.hpp> // boost::tuple boost::make_tuple boost::get
+
+#  ifndef APPLY_BOOST_GET_TUPLE
+#    define APPLY_BOOST_GET_TUPLE(_, n, x) x##n x##n##_(boost::get<n>(tuple_)); // T0 T0_(boost::get<0>(tuple_));
+#  endif // !APPLY_BOOST_GET_TUPLE
+
+#  ifndef APPLY_BOOST_TUPLE
+#    define APPLY_BOOST_TUPLE(z, n, _) \
+    template< \
+        typename F BOOST_PP_COMMA_IF(n) \
+        BOOST_PP_REPEAT_TYPENAME(z, n, T)> \
+    inline typename boost::result_of<F(BOOST_PP_REPEAT_TYPE(z, n, T))>::type apply(\
+        F f BOOST_PP_COMMA_IF(n) \
+        boost::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)> tuple_) \
+    { \
+        BOOST_PP_REPEAT_Z(z, n, APPLY_BOOST_GET_TUPLE, T) \
+        return f(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
+    }
+#  endif // !APPLY_BOOST_TUPLE
+
+#endif // APPLY_USE_BOOST_TUPLE
+
 
 #if APPLY_HAS_CXX_11
+
 #  ifndef APPLY_STD_GET_TUPLE
 #    define APPLY_STD_GET_TUPLE(_, n, x) x##n x##n##_(std::get<n>(tuple_)); // T0 T0_(std::get<0>(tuple_));
 #  endif // !APPLY_STD_GET_TUPLE
@@ -47,182 +95,54 @@
 #  ifndef APPLY_STD_GET_ARRAY
 #    define APPLY_STD_GET_ARRAY(_, n, x) x x##n##_(std::get<n>(array_)); // T T0_(std::get<0>(array_));
 #  endif // !APPLY_STD_GET_ARRAY
-#endif // APPLY_HAS_CXX_11
-
-#ifndef APPLY_MSGPACK_TUPLE
-#  define APPLY_MSGPACK_TUPLE(z, n, _) \
-    template< \
-        typename R BOOST_PP_COMMA_IF(n) \
-        BOOST_PP_REPEAT_TYPENAME(z, n, T)> \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_TYPE(z, n, T)) BOOST_PP_COMMA_IF(n) \
-        msgpack::type::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)> tpl) \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_MSGPACK_GET, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
-    } \
-    template< \
-        typename R BOOST_PP_COMMA_IF(n) \
-        BOOST_PP_REPEAT_TYPENAME(z, n, T)> \
-    inline R apply(\
-        boost::function<R(BOOST_PP_REPEAT_TYPE(z, n, T))> func BOOST_PP_COMMA_IF(n) \
-        msgpack::type::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)> tpl) \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_MSGPACK_GET, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
-    }
-#endif // !APPLY_MSGPACK_TUPLE
-
-#if APPLY_HAS_CXX_11
 #  ifndef APPLY_STD_TUPLE
 #    define APPLY_STD_TUPLE(z, n, _) \
     template< \
-        typename R BOOST_PP_COMMA_IF(n) \
+        typename F BOOST_PP_COMMA_IF(n) \
         BOOST_PP_REPEAT_TYPENAME(z, n, T)> \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_TYPE(z, n, T)) BOOST_PP_COMMA_IF(n) \
-        std::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)>& tuple_) \
+    inline auto apply(\
+        F&& f BOOST_PP_COMMA_IF(n) \
+        std::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)>&& tuple_) -> typename boost::result_of<F(BOOST_PP_REPEAT_TYPE(z, n, T))>::type \
     { \
         BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_TUPLE, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
-    } \
-    template< \
-        typename R BOOST_PP_COMMA_IF(n) /* typename R, */ \
-        BOOST_PP_REPEAT_TYPENAME(z, n, T)> /* typename T0, typename T1 ... */ \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_TYPE(z, n, T)) BOOST_PP_COMMA_IF(n) /* R(*func)(T0, T1 ...) */ \
-        const std::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)>& tuple_) /* std::tuple<T0, T1 ...)> tpl */ \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_TUPLE, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
-    } \
-    template< \
-        typename R BOOST_PP_COMMA_IF(n) /* typename R, */ \
-        BOOST_PP_REPEAT_TYPENAME(z, n, T)> /* typename T0, typename T1 ... */ \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_TYPE(z, n, T)) BOOST_PP_COMMA_IF(n) /* R(*func)(T0, T1 ...) */ \
-        std::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)>&& tuple_) /* std::tuple<T0, T1 ...)> tpl */ \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_TUPLE, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
-    } \
-    template< \
-        typename R BOOST_PP_COMMA_IF(n) /* typename R, */ \
-        BOOST_PP_REPEAT_TYPENAME(z, n, T)> /* typename T0, typename T1 ... */ \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_TYPE(z, n, T)) BOOST_PP_COMMA_IF(n) /* R(*func)(T0, T1 ...) */ \
-        const std::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)>&& tuple_) /* std::tuple<T0, T1 ...)> tpl */ \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_TUPLE, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
-    } \
-    template< \
-        typename R BOOST_PP_COMMA_IF(n) /* typename R, */ \
-        BOOST_PP_REPEAT_TYPENAME(z, n, T)> /* typename T0, typename T1 ... */ \
-    inline R apply(\
-        std::function<R(BOOST_PP_REPEAT_TYPE(z, n, T))> func BOOST_PP_COMMA_IF(n) \
-        /* std::function<R(T0, T1 ...)> function, */ \
-        std::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)>&& tuple_) \
-        /* std::tuple<T0, T1 ...)> tpl */ \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_TUPLE, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
+        return f(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
     }
-#  endif // !APPLY_STD_TUPLE
+#  endif
 
 #  ifndef APPLY_ARRAY
-#    define APPLY_ARRAY(z, n, _) \
-    template<typename R, typename T, std::size_t N> \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T)), /* R(*func)(T, T ...), */ \
-        std::array<T, N>& array_) \
+#  define APPLY_ARRAY(z, n, _) \
+    template<typename F, typename T, std::size_t N> \
+    inline auto apply(\
+        F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T))>::type \
     { \
         BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_ARRAY, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
+        return f(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
     } \
-    template<typename R, typename T, std::size_t N> \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T)), /* R(*func)(T, T ...), */ \
-        const std::array<T, N>& array_) \
+    template<typename F, typename T, std::size_t N> \
+    inline auto apply(\
+        F&& f, const std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T))>::type \
     { \
         BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_ARRAY, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
+        return f(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
     } \
-    template<typename R, typename T, std::size_t N> \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T)), /* R(*func)(T, T ...), */ \
-        std::array<T, N>&& array_) \
+    template<typename F, typename T, std::size_t N> \
+    inline auto apply(\
+        F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T))>::type \
     { \
         BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_ARRAY, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
+        return f(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
     } \
-    template<typename R, typename T, std::size_t N> \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T)), /* R(*func)(T, T ...), */ \
-        const std::array<T, N>&& array_) \
+    template<typename F, typename T, std::size_t N> \
+    inline auto apply(\
+        F&& f, const std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T))>::type \
     { \
         BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_ARRAY, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
-    } \
-    template<typename R, typename T, std::size_t N> \
-    inline R apply(\
-        std::function<R(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T))>&& func, /* std::function<R(T, T ...)> func, */ \
-        std::array<T, N>& array_) \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_ARRAY, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
-    } \
-    template<typename R, typename T, std::size_t N> \
-    inline R apply(\
-        std::function<R(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T))>&& func, /* std::function<R(T, T ...)> func, */ \
-        const std::array<T, N>& array_) \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_ARRAY, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
-    } \
-    template<typename R, typename T, std::size_t N> \
-    inline R apply(\
-        std::function<R(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T))>&& func, /* std::function<R(T, T ...)> func, */ \
-        std::array<T, N>&& array_) \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_ARRAY, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
-    } \
-    template<typename R, typename T, std::size_t N> \
-    inline R apply(\
-        std::function<R(BOOST_PP_REPEAT_Z(z, n, ARRAY_TYPE, T))>&& func, /* std::function<R(T, T ...)> func, */ \
-        const std::array<T, N>&& array_) \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_STD_GET_ARRAY, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); /* return func(T0_, T1_ ...); */ \
+        return f(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
     }
 #  endif // !APPLY_ARRAY
 
 #endif // APPLY_HAS_CXX_11
 
-#ifndef APPLY_BOOST_TUPLE
-#  define APPLY_BOOST_TUPLE(z, n, _) \
-    template< \
-        typename R BOOST_PP_COMMA_IF(n) \
-        BOOST_PP_REPEAT_TYPENAME(z, n, T)> \
-    inline R apply(\
-        R(*func)(BOOST_PP_REPEAT_TYPE(z, n, T)) BOOST_PP_COMMA_IF(n) \
-        boost::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)> tuple_) \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_BOOST_GET_TUPLE, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
-    } \
-    template< \
-        typename R BOOST_PP_COMMA_IF(n) \
-        BOOST_PP_REPEAT_TYPENAME(z, n, T)> \
-    inline R apply(\
-        boost::function<R(BOOST_PP_REPEAT_TYPE(z, n, T))> func BOOST_PP_COMMA_IF(n) \
-        boost::tuple<BOOST_PP_REPEAT_TYPE(z, n, T)> tuple_) \
-    { \
-        BOOST_PP_REPEAT_Z(z, n, APPLY_BOOST_GET_TUPLE, T) \
-        return func(BOOST_PP_REPEAT_ARGUMENT(z, n, T)); \
-    }
-#endif // !APPLY_BOOST_TUPLE
 
 namespace lite
 {
@@ -236,30 +156,29 @@ namespace lite
 #endif // __cpp_rvalue_references
     };
 
-    template<typename R, typename T1, typename T2>
-    inline R apply(R(*func)(T1, T2), std::pair<T1, T2> pr)
-    {
-        return func(pr.first, pr.second);
-    }
-
-    template<typename R, typename T1, typename T2>
-    inline R apply(boost::function<R(T1, T2)> func, std::pair<T1, T2> pr)
-    {
-        return func(pr.first, pr.second);
-    }
-
+#if APPLY_USE_MSGPACK_TUPLE
     BOOST_PP_REPEAT_FROM_TO(1, 10, APPLY_MSGPACK_TUPLE, _)
+#endif // APPLY_USE_MSGPACK_TUPLE
+
+#if APPLY_USE_BOOST_TUPLE
     BOOST_PP_REPEAT_FROM_TO(1, 10, APPLY_BOOST_TUPLE, _)
+#endif // APPLY_USE_BOOST_TUPLE
+
 #if APPLY_HAS_CXX_11
-    template<typename R, typename T1, typename T2>
-    inline R apply(
-        std::function<R(T1, T2)>&& func,
-        std::pair<T1, T2>&& pr)
+    template<typename F, typename T1, typename T2>
+    inline auto apply(
+        F&& f,
+        std::pair<T1, T2>&& pr) -> decltype(f(pr.first, pr.second))
     {
-        return func(pr.first, pr.second);
+        return f(pr.first, pr.second);
     }
-    BOOST_PP_REPEAT_FROM_TO(1, 10, APPLY_STD_TUPLE, _)
     BOOST_PP_REPEAT_FROM_TO(1, 10, APPLY_ARRAY, _)
+    BOOST_PP_REPEAT_FROM_TO(1, 10, APPLY_STD_TUPLE, _)
+#else
+    template<typename F, typename T1, typename T2>
+    inline typename boost::result_of<F(T1, T2)>::type apply(F f, std::pair<T1, T2> pr)
+    {
+        return f(pr.first, pr.second);
+    }
 #endif // APPLY_HAS_CXX_11
 }
-
