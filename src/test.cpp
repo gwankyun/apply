@@ -2,6 +2,7 @@
 #include <tuple>
 #include <array>
 #include <utility>
+#include <type_traits>
 #include <catch2/catch.hpp>
 #include <msgpack.hpp>
 #include <boost/tuple/tuple.hpp>
@@ -52,6 +53,19 @@ int f9(int a, int b, int c, int d, int e, int f, int g, int h, int i)
     return a + b + c + d + e + f + g + h + i;
 }
 
+int update(int& a, int& b)
+{
+    a += 1;
+    b += 1;
+    return 0;
+}
+
+void add1(int& a, int& b)
+{
+    a += 1;
+    b += 1;
+}
+
 TEST_CASE("msgpack::type::tuple", "[lite::apply]")
 {
     REQUIRE(lite::apply(f1, msgpack::type::make_tuple(1)) == 1);
@@ -100,6 +114,15 @@ TEST_CASE("std::array", "[lite::apply]")
     std::array<int, 9> a9{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     REQUIRE(lite::apply(f9, a9) == 45);
 }
+
+TEST_CASE("std::tuple mutable", "[lite::apply]")
+{
+    int a = 0;
+    int b = 1;
+    REQUIRE(lite::apply(update, std::tuple<int&, int&>(a, b)) == 0);
+    REQUIRE(a == 1);
+    REQUIRE(b == 2);
+}
 #endif // APPLY_HAS_CXX_11
 
 TEST_CASE("boost::tuple", "[lite::apply]")
@@ -120,3 +143,29 @@ TEST_CASE("std::pair", "[lite::apply]")
     REQUIRE(lite::apply(f2, std::make_pair(1, 2)) == 3);
 }
 
+TEST_CASE("boost::tuple mutable", "[lite::apply]")
+{
+    int a = 0;
+    int b = 1;
+    REQUIRE(lite::apply(update, boost::tuple<int&, int&>(a, b)) == 0);
+    REQUIRE(a == 1);
+    REQUIRE(b == 2);
+}
+
+TEST_CASE("msgpace::type::tuple mutable", "[lite::apply]")
+{
+    int a = 0;
+    int b = 1;
+    REQUIRE(lite::apply(update, msgpack::type::tuple<int&, int&>(a, b)) == 0);
+    REQUIRE(a == 1);
+    REQUIRE(b == 2);
+}
+
+TEST_CASE("add1", "[lite::apply]")
+{
+    int a = 0;
+    int b = 1;
+    lite::apply(add1, msgpack::type::tuple<int&, int&>(a, b));
+    REQUIRE(a == 1);
+    REQUIRE(b == 2);
+}

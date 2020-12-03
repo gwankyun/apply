@@ -6,7 +6,10 @@ set(project apply)
 project(${project})
 
 # 包含模塊
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH
+  ${CMAKE_MODULE_PATH}
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 include(CMakePrintHelpers)
 
 # 啟用IDE目錄功能
@@ -30,7 +33,6 @@ add_executable(${apply})
 target_sources(${apply} PRIVATE
   src/main.cpp
   include/apply.hpp
-  include/apply/preprocessor.hpp
   cmake/Findapply.cmake)
 target_link_libraries(${apply} PUBLIC apply::apply)
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <utility>
-#include <boost/utility/result_of.hpp>
-#include "apply/preprocessor.hpp" // BOOST_PP_*
+#include <boost/utility/result_of.hpp> // boost::result_of
+#include <preprocessor.hpp> // BOOST_PP_*
 
 #ifndef APPLY_HAS_CXX_11
 #  if __cplusplus >= 201103L || (defined(__cpp_variadic_templates) && defined(__cpp_rvalue_references))
@@ -39,7 +39,7 @@
 #  include <msgpack.hpp> // msgpack::type::*
 
 #  ifndef APPLY_MSGPACK_GET
-#    define APPLY_MSGPACK_GET(_, n, x) x##n x##n##_(msgpack::type::get<n>(tuple_)); // T0 T0_(msgpack::type::get<0>(tpl));
+#    define APPLY_MSGPACK_GET(z, n, x) x##n x##n##_(msgpack::type::get<n>(tuple_)); // T0 T0_(msgpack::type::get<0>(tpl));
 #  endif // !APPLY_MSGPACK_GET
 
 #  ifndef APPLY_MSGPACK_TUPLE
@@ -64,7 +64,7 @@
 #  include <boost/tuple/tuple.hpp> // boost::tuple boost::make_tuple boost::get
 
 #  ifndef APPLY_BOOST_GET_TUPLE
-#    define APPLY_BOOST_GET_TUPLE(_, n, x) x##n x##n##_(boost::get<n>(tuple_)); // T0 T0_(boost::get<0>(tuple_));
+#    define APPLY_BOOST_GET_TUPLE(z, n, x) x##n x##n##_(boost::get<n>(tuple_)); // T0 T0_(boost::get<0>(tuple_));
 #  endif // !APPLY_BOOST_GET_TUPLE
 
 #  ifndef APPLY_BOOST_TUPLE
@@ -87,13 +87,13 @@
 #if APPLY_HAS_CXX_11
 
 #  ifndef APPLY_STD_GET_TUPLE
-#    define APPLY_STD_GET_TUPLE(_, n, x) x##n x##n##_(std::get<n>(tuple_)); // T0 T0_(std::get<0>(tuple_));
+#    define APPLY_STD_GET_TUPLE(z, n, x) x##n x##n##_(std::get<n>(tuple_)); // T0 T0_(std::get<0>(tuple_));
 #  endif // !APPLY_STD_GET_TUPLE
 #  ifndef ARRAY_TYPE
 #    define ARRAY_TYPE(z, n, T) BOOST_PP_COMMA_IF(n) T // , T
 #  endif // !ARRAY_TYPE
 #  ifndef APPLY_STD_GET_ARRAY
-#    define APPLY_STD_GET_ARRAY(_, n, x) x x##n##_(std::get<n>(array_)); // T T0_(std::get<0>(array_));
+#    define APPLY_STD_GET_ARRAY(z, n, x) x x##n##_(std::get<n>(array_)); // T T0_(std::get<0>(array_));
 #  endif // !APPLY_STD_GET_ARRAY
 #  ifndef APPLY_STD_TUPLE
 #    define APPLY_STD_TUPLE(z, n, _) \
