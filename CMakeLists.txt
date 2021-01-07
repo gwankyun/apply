@@ -33,6 +33,10 @@ add_executable(${apply})
 target_sources(${apply} PRIVATE
   src/main.cpp
   include/apply.hpp
+  include/apply/tuple.hpp
+  include/apply/msgpack_tuple.hpp
+  include/apply/boost_tuple.hpp
+  include/apply/boost_array.hpp
   cmake/Findapply.cmake)
 target_link_libraries(${apply} PUBLIC apply::apply)
 

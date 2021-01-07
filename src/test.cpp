@@ -115,6 +115,28 @@ TEST_CASE("std::array", "[lite::apply]")
     REQUIRE(lite::apply(f9, a9) == 45);
 }
 
+TEST_CASE("boost::array", "[lite::apply]")
+{
+    boost::array<int, 1> a1{ 1 };
+    REQUIRE(lite::apply(f1, a1) == 1);
+    boost::array<int, 2> a2{ 1, 2 };
+    REQUIRE(lite::apply(f2, a2) == 3);
+    boost::array<int, 3> a3{ 1, 2, 3 };
+    REQUIRE(lite::apply(f3, a3) == 6);
+    boost::array<int, 4> a4{ 1, 2, 3, 4 };
+    REQUIRE(lite::apply(f4, a4) == 10);
+    boost::array<int, 5> a5{ 1, 2, 3, 4, 5 };
+    REQUIRE(lite::apply(f5, a5) == 15);
+    boost::array<int, 6> a6{ 1, 2, 3, 4, 5, 6 };
+    REQUIRE(lite::apply(f6, a6) == 21);
+    boost::array<int, 7> a7{ 1, 2, 3, 4, 5, 6, 7 };
+    REQUIRE(lite::apply(f7, a7) == 28);
+    boost::array<int, 8> a8{ 1, 2, 3, 4, 5, 6, 7, 8 };
+    REQUIRE(lite::apply(f8, a8) == 36);
+    boost::array<int, 9> a9{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    REQUIRE(lite::apply(f9, a9) == 45);
+}
+
 TEST_CASE("std::tuple mutable", "[lite::apply]")
 {
     int a = 0;
@@ -157,15 +179,6 @@ TEST_CASE("msgpace::type::tuple mutable", "[lite::apply]")
     int a = 0;
     int b = 1;
     REQUIRE(lite::apply(update, msgpack::type::tuple<int&, int&>(a, b)) == 0);
-    REQUIRE(a == 1);
-    REQUIRE(b == 2);
-}
-
-TEST_CASE("add1", "[lite::apply]")
-{
-    int a = 0;
-    int b = 1;
-    lite::apply(add1, msgpack::type::tuple<int&, int&>(a, b));
     REQUIRE(a == 1);
     REQUIRE(b == 2);
 }
