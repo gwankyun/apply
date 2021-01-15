@@ -15,113 +15,109 @@ namespace lite
 #  endif // !APPLY_ARRAY_TYPE
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_)
-        -> ENABLE_IF_T(
-            !IS_SAME_V(RESULT_OF_T(F(T)), VOID_T),
-            RESULT_OF_T(F(T))
-        )
+    inline auto apply(F&& f, std::array<T, N>&& array_) -> RESULT_OF_T(F(T))
     {
         return f(std::get<0>(array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(T)>::type
+    inline auto apply(F&& f, std::array<T, N>& array_) -> RESULT_OF_T(F(T))
     {
         return f(std::get<0>(array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(2, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>&& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(2, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(2, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(2, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(2, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(2, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(3, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>&& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(3, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(3, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(3, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(3, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(3, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(4, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>&& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(4, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(4, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(4, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(4, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(4, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(5, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>&& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(5, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(5, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(5, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(5, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(5, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(6, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>&& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(6, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(6, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(6, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(6, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(6, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(7, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>&& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(7, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(7, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(7, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(7, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(7, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(8, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>&& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(8, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(8, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(8, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(8, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(8, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(9, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>&& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(9, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(9, APPLY_STD_GET, array_));
     }
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>& array_) -> typename boost::result_of<F(BOOST_PP_ENUM(9, APPLY_ARRAY_TYPE, T))>::type
+    inline auto apply(F&& f, std::array<T, N>& array_) -> RESULT_OF_T(F(BOOST_PP_ENUM(9, APPLY_ARRAY_TYPE, T)))
     {
         return f(BOOST_PP_REPEAT(9, APPLY_STD_GET, array_));
     }

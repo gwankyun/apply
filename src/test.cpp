@@ -8,6 +8,8 @@
 #include <boost/tuple/tuple.hpp>
 #include <apply.hpp>
 
+int g_result;
+
 int f1(int a)
 {
     return a;
@@ -16,6 +18,11 @@ int f1(int a)
 void g1(int& a)
 {
     a = 0;
+}
+
+void h1(int a)
+{
+    g_result = a;
 }
 
 int f2(int a, int b)
@@ -28,6 +35,11 @@ void g2(int& a, int b)
     a = b;
 }
 
+void h2(int a, int b)
+{
+    g_result = a + b;
+}
+
 int f3(int a, int b, int c)
 {
     return a + b + c;
@@ -36,6 +48,11 @@ int f3(int a, int b, int c)
 void g3(int& a, int b, int c)
 {
     a = b + c;
+}
+
+void h3(int a, int b, int c)
+{
+    g_result = a + b + c;
 }
 
 int f4(int a, int b, int c, int d)
@@ -48,6 +65,11 @@ void g4(int& a, int b, int c, int d)
     a = b + c + d;
 }
 
+void h4(int a, int b, int c, int d)
+{
+    g_result = a + b + c + d;
+}
+
 int f5(int a, int b, int c, int d, int e)
 {
     return a + b + c + d + e;
@@ -56,6 +78,11 @@ int f5(int a, int b, int c, int d, int e)
 void g5(int& a, int b, int c, int d, int e)
 {
     a = b + c + d + e;
+}
+
+void h5(int a, int b, int c, int d, int e)
+{
+    g_result = a + b + c + d + e;
 }
 
 int f6(int a, int b, int c, int d, int e, int f)
@@ -68,6 +95,11 @@ void g6(int& a, int b, int c, int d, int e, int f)
     a = b + c + d + e + f;
 }
 
+void h6(int a, int b, int c, int d, int e, int f)
+{
+    g_result = a + b + c + d + e + f;
+}
+
 int f7(int a, int b, int c, int d, int e, int f, int g)
 {
     return a + b + c + d + e + f + g;
@@ -76,6 +108,11 @@ int f7(int a, int b, int c, int d, int e, int f, int g)
 void g7(int& a, int b, int c, int d, int e, int f, int g)
 {
     a = b + c + d + e + f + g;
+}
+
+void h7(int a, int b, int c, int d, int e, int f, int g)
+{
+    g_result = a + b + c + d + e + f + g;
 }
 
 int f8(int a, int b, int c, int d, int e, int f, int g, int h)
@@ -88,6 +125,11 @@ void g8(int& a, int b, int c, int d, int e, int f, int g, int h)
     a = b + c + d + e + f + g + h;
 }
 
+void h8(int a, int b, int c, int d, int e, int f, int g, int h)
+{
+    g_result = a + b + c + d + e + f + g + h;
+}
+
 int f9(int a, int b, int c, int d, int e, int f, int g, int h, int i)
 {
     return a + b + c + d + e + f + g + h + i;
@@ -96,6 +138,11 @@ int f9(int a, int b, int c, int d, int e, int f, int g, int h, int i)
 void g9(int& a, int b, int c, int d, int e, int f, int g, int h, int i)
 {
     a = b + c + d + e + f + g + h + i;
+}
+
+void h9(int a, int b, int c, int d, int e, int f, int g, int h, int i)
+{
+    g_result = a + b + c + d + e + f + g + h + i;
 }
 
 int update(int& a, int& b)
@@ -196,6 +243,24 @@ TEST_CASE("std::array", "[lite::apply]")
     REQUIRE(lite::apply(f8, a8) == 36);
     std::array<int, 9> a9{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     REQUIRE(lite::apply(f9, a9) == 45);
+    lite::apply(h1, a1);
+    REQUIRE(g_result == 1);
+    lite::apply(h2, a2);
+    REQUIRE(g_result == 3);
+    lite::apply(h3, a3);
+    REQUIRE(g_result == 6);
+    lite::apply(h4, a4);
+    REQUIRE(g_result == 10);
+    lite::apply(h5, a5);
+    REQUIRE(g_result == 15);
+    lite::apply(h6, a6);
+    REQUIRE(g_result == 21);
+    lite::apply(h7, a7);
+    REQUIRE(g_result == 28);
+    lite::apply(h8, a8);
+    REQUIRE(g_result == 36);
+    lite::apply(h9, a9);
+    REQUIRE(g_result == 45);
 }
 
 TEST_CASE("boost::array", "[lite::apply]")
