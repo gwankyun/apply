@@ -37,6 +37,8 @@ target_sources(${apply} PRIVATE
   include/apply/msgpack_tuple.hpp
   include/apply/boost_tuple.hpp
   include/apply/boost_array.hpp
+  include/apply/array.hpp
+  include/apply/common.hpp
   cmake/Findapply.cmake)
 target_link_libraries(${apply} PUBLIC apply::apply)
 

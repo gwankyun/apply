@@ -15,7 +15,11 @@ namespace lite
 #  endif // !APPLY_ARRAY_TYPE
 
     template<typename F, typename T, std::size_t N>
-    inline auto apply(F&& f, std::array<T, N>&& array_) -> typename boost::result_of<F(T)>::type
+    inline auto apply(F&& f, std::array<T, N>&& array_)
+        -> ENABLE_IF_T(
+            !IS_SAME_V(RESULT_OF_T(F(T)), VOID_T),
+            RESULT_OF_T(F(T))
+        )
     {
         return f(std::get<0>(array_));
     }

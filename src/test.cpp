@@ -13,9 +13,19 @@ int f1(int a)
     return a;
 }
 
+void g1(int& a)
+{
+    a = 0;
+}
+
 int f2(int a, int b)
 {
     return a + b;
+}
+
+void g2(int& a, int b)
+{
+    a = b;
 }
 
 int f3(int a, int b, int c)
@@ -23,9 +33,19 @@ int f3(int a, int b, int c)
     return a + b + c;
 }
 
+void g3(int& a, int b, int c)
+{
+    a = b + c;
+}
+
 int f4(int a, int b, int c, int d)
 {
     return a + b + c + d;
+}
+
+void g4(int& a, int b, int c, int d)
+{
+    a = b + c + d;
 }
 
 int f5(int a, int b, int c, int d, int e)
@@ -33,9 +53,19 @@ int f5(int a, int b, int c, int d, int e)
     return a + b + c + d + e;
 }
 
+void g5(int& a, int b, int c, int d, int e)
+{
+    a = b + c + d + e;
+}
+
 int f6(int a, int b, int c, int d, int e, int f)
 {
     return a + b + c + d + e + f;
+}
+
+void g6(int& a, int b, int c, int d, int e, int f)
+{
+    a = b + c + d + e + f;
 }
 
 int f7(int a, int b, int c, int d, int e, int f, int g)
@@ -43,14 +73,29 @@ int f7(int a, int b, int c, int d, int e, int f, int g)
     return a + b + c + d + e + f + g;
 }
 
+void g7(int& a, int b, int c, int d, int e, int f, int g)
+{
+    a = b + c + d + e + f + g;
+}
+
 int f8(int a, int b, int c, int d, int e, int f, int g, int h)
 {
     return a + b + c + d + e + f + g + h;
 }
 
+void g8(int& a, int b, int c, int d, int e, int f, int g, int h)
+{
+    a = b + c + d + e + f + g + h;
+}
+
 int f9(int a, int b, int c, int d, int e, int f, int g, int h, int i)
 {
     return a + b + c + d + e + f + g + h + i;
+}
+
+void g9(int& a, int b, int c, int d, int e, int f, int g, int h, int i)
+{
+    a = b + c + d + e + f + g + h + i;
 }
 
 int update(int& a, int& b)
@@ -77,6 +122,25 @@ TEST_CASE("msgpack::type::tuple", "[lite::apply]")
     REQUIRE(lite::apply(f7, msgpack::type::make_tuple(1, 2, 3, 4, 5, 6, 7)) == 28);
     REQUIRE(lite::apply(f8, msgpack::type::make_tuple(1, 2, 3, 4, 5, 6, 7, 8)) == 36);
     REQUIRE(lite::apply(f9, msgpack::type::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
+    int result = 100;
+    lite::apply(g1, msgpack::type::tuple<int&>(result));
+    REQUIRE(result == 0);
+    lite::apply(g2, msgpack::type::tuple<int&, int>(result, 1));
+    REQUIRE(result == 1);
+    lite::apply(g3, msgpack::type::tuple<int&, int, int>(result, 1, 2));
+    REQUIRE(result == 3);
+    lite::apply(g4, msgpack::type::tuple<int&, int, int, int>(result, 1, 2, 3));
+    REQUIRE(result == 6);
+    lite::apply(g5, msgpack::type::tuple<int&, int, int, int, int>(result, 1, 2, 3, 4));
+    REQUIRE(result == 10);
+    lite::apply(g6, msgpack::type::tuple<int&, int, int, int, int, int>(result, 1, 2, 3, 4, 5));
+    REQUIRE(result == 15);
+    lite::apply(g7, msgpack::type::tuple<int&, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6));
+    REQUIRE(result == 21);
+    lite::apply(g8, msgpack::type::tuple<int&, int, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6, 7));
+    REQUIRE(result == 28);
+    lite::apply(g9, msgpack::type::tuple<int&, int, int, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6, 7, 8));
+    REQUIRE(result == 36);
 }
 
 #if APPLY_HAS_CXX_11
@@ -91,6 +155,25 @@ TEST_CASE("std::tuple", "[lite::apply]")
     REQUIRE(lite::apply(f7, std::make_tuple(1, 2, 3, 4, 5, 6, 7)) == 28);
     REQUIRE(lite::apply(f8, std::make_tuple(1, 2, 3, 4, 5, 6, 7, 8)) == 36);
     REQUIRE(lite::apply(f9, std::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
+    int result = 100;
+    lite::apply(g1, std::tuple<int&>(result));
+    REQUIRE(result == 0);
+    lite::apply(g2, std::tuple<int&, int>(result, 1));
+    REQUIRE(result == 1);
+    lite::apply(g3, std::tuple<int&, int, int>(result, 1, 2));
+    REQUIRE(result == 3);
+    lite::apply(g4, std::tuple<int&, int, int, int>(result, 1, 2, 3));
+    REQUIRE(result == 6);
+    lite::apply(g5, std::tuple<int&, int, int, int, int>(result, 1, 2, 3, 4));
+    REQUIRE(result == 10);
+    lite::apply(g6, std::tuple<int&, int, int, int, int, int>(result, 1, 2, 3, 4, 5));
+    REQUIRE(result == 15);
+    lite::apply(g7, std::tuple<int&, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6));
+    REQUIRE(result == 21);
+    lite::apply(g8, std::tuple<int&, int, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6, 7));
+    REQUIRE(result == 28);
+    lite::apply(g9, std::tuple<int&, int, int, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6, 7, 8));
+    REQUIRE(result == 36);
 }
 
 TEST_CASE("std::array", "[lite::apply]")
@@ -158,6 +241,25 @@ TEST_CASE("boost::tuple", "[lite::apply]")
     REQUIRE(lite::apply(f7, boost::make_tuple(1, 2, 3, 4, 5, 6, 7)) == 28);
     REQUIRE(lite::apply(f8, boost::make_tuple(1, 2, 3, 4, 5, 6, 7, 8)) == 36);
     REQUIRE(lite::apply(f9, boost::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
+    int result = 100;
+    lite::apply(g1, boost::tuple<int&>(result));
+    REQUIRE(result == 0);
+    lite::apply(g2, boost::tuple<int&, int>(result, 1));
+    REQUIRE(result == 1);
+    lite::apply(g3, boost::tuple<int&, int, int>(result, 1, 2));
+    REQUIRE(result == 3);
+    lite::apply(g4, boost::tuple<int&, int, int, int>(result, 1, 2, 3));
+    REQUIRE(result == 6);
+    lite::apply(g5, boost::tuple<int&, int, int, int, int>(result, 1, 2, 3, 4));
+    REQUIRE(result == 10);
+    lite::apply(g6, boost::tuple<int&, int, int, int, int, int>(result, 1, 2, 3, 4, 5));
+    REQUIRE(result == 15);
+    lite::apply(g7, boost::tuple<int&, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6));
+    REQUIRE(result == 21);
+    lite::apply(g8, boost::tuple<int&, int, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6, 7));
+    REQUIRE(result == 28);
+    lite::apply(g9, boost::tuple<int&, int, int, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6, 7, 8));
+    REQUIRE(result == 36);
 }
 
 TEST_CASE("std::pair", "[lite::apply]")
