@@ -283,6 +283,24 @@ TEST_CASE("boost::array", "[lite::apply]")
     REQUIRE(lite::apply(f8, a8) == 36);
     boost::array<int, 9> a9{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     REQUIRE(lite::apply(f9, a9) == 45);
+    lite::apply(h1, a1);
+    REQUIRE(g_result == 1);
+    lite::apply(h2, a2);
+    REQUIRE(g_result == 3);
+    lite::apply(h3, a3);
+    REQUIRE(g_result == 6);
+    lite::apply(h4, a4);
+    REQUIRE(g_result == 10);
+    lite::apply(h5, a5);
+    REQUIRE(g_result == 15);
+    lite::apply(h6, a6);
+    REQUIRE(g_result == 21);
+    lite::apply(h7, a7);
+    REQUIRE(g_result == 28);
+    lite::apply(h8, a8);
+    REQUIRE(g_result == 36);
+    lite::apply(h9, a9);
+    REQUIRE(g_result == 45);
 }
 
 TEST_CASE("std::tuple mutable", "[lite::apply]")
