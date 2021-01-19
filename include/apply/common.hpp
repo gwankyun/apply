@@ -12,6 +12,18 @@
 #  endif // __cplusplus >= 201103L || (defined(__cpp_variadic_templates) && defined(__cpp_rvalue_references))
 #endif // !APPLY_HAS_CXX_11
 
+#ifndef APPLY_HAS_CXX_17
+#  if APPLY_HAS_CXX_11 && (__cplusplus >= 201703L || (defined(__cpp_lib_type_trait_variable_templates)))
+#    define APPLY_HAS_CXX_17 1
+#  else
+#    define APPLY_HAS_CXX_17 0
+#  endif // APPLY_HAS_CXX_11 && (__cplusplus >= 201703L || (defined(__cpp_lib_type_trait_variable_templates)))
+#endif // !APPLY_HAS_CXX_17
+
+#if APPLY_HAS_CXX_11
+#  include <type_traits>
+#endif // APPLY_HAS_CXX_11
+
 #ifndef APPLY_ENABLE_MSGPACK_TUPLE
 #  define APPLY_ENABLE_MSGPACK_TUPLE 1
 #endif // !APPLY_ENABLE_MSGPACK_TUPLE
@@ -45,5 +57,9 @@ namespace lite
 #endif // !ENABLE_IF_T
 
 #ifndef IS_SAME_V
-#  define IS_SAME_V(a, b) boost::is_same<a, b>::value
+#  if APPLY_HAS_CXX_11
+#    define IS_SAME_V(a, b) std::is_same<a, b>::value
+#  else
+#    define IS_SAME_V(a, b) boost::is_same<a, b>::value
+#  endif // APPLY_HAS_CXX_11
 #endif // !IS_SAME_V
