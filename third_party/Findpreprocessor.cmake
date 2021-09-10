@@ -1,15 +1,22 @@
 ﻿if(preprocessor_ROOT)
-    set(preprocessor_INCLUDE_DIRS
-      ${preprocessor_ROOT}/include)
-    find_package(Boost REQUIRED)
+    include(CMakePrintHelpers)
+    set(preprocessor_INCLUDE_DIRS ${preprocessor_ROOT}/include)
+    set(preprocessor_LIBRARIES)
+    find_package(Boost)
+    cmake_print_variables(Boost_FOUND)
+    if(Boost_FOUND)
+      list(APPEND preprocessor_LIBRARIES Boost::headers)
+    endif()
     set(preprocessor_FOUND TRUE)
-      if(NOT TARGET preprocessor::preprocessor)
+    if(NOT TARGET preprocessor::preprocessor)
       add_library(preprocessor_header_only INTERFACE)
       add_library(preprocessor::preprocessor ALIAS preprocessor_header_only)
-      set(preprocessor_LIBRARIES preprocessor::preprocessor Boost::headers)
+      list(APPEND preprocessor_LIBRARIES preprocessor::preprocessor)
       set_target_properties(preprocessor_header_only PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${preprocessor_INCLUDE_DIRS}"
         INTERFACE_LINK_LIBRARIES "${preprocessor_LIBRARIES}"
       )
     endif()
+    cmake_print_variables(preprocessor_INCLUDE_DIRS)
+    cmake_print_variables(preprocessor_LIBRARIES)
 endif()

@@ -37,7 +37,7 @@
 #endif // !APPLY_ENABLE_BOOST_ARRAY
 
 #ifndef RESULT_OF_T
-#  define RESULT_OF_T(f) typename typename boost::result_of<f>::type
+#  define RESULT_OF_T(f) typename boost::result_of<f>::type
 #endif // !RESULT_OF_T 
 
 namespace lite
