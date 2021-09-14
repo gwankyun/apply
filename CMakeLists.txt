@@ -11,6 +11,7 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake
   ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 include(CMakePrintHelpers)
+include(GNUInstallDirs)
 include(common)
 
 # 啟用IDE目錄功能

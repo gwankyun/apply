@@ -311,7 +311,7 @@ TEST_CASE("std::tuple mutable", "[lite::apply]")
     REQUIRE(a == 1);
     REQUIRE(b == 2);
 }
-#endif // APPLY_HAS_CXX_11
+#endif
 
 TEST_CASE("boost::tuple", "[lite::apply]")
 {
@@ -324,6 +324,12 @@ TEST_CASE("boost::tuple", "[lite::apply]")
     REQUIRE(lite::apply(f7, boost::make_tuple(1, 2, 3, 4, 5, 6, 7)) == 28);
     REQUIRE(lite::apply(f8, boost::make_tuple(1, 2, 3, 4, 5, 6, 7, 8)) == 36);
     REQUIRE(lite::apply(f9, boost::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
+
+    boost::tuple<int> t1(1);
+    REQUIRE(lite::apply(f1, t1) == 1);
+    boost::tuple<int, int> t2(1, 2);
+    REQUIRE(lite::apply(f2, t2) == 3);
+
     int result = 100;
     lite::apply(g1, boost::tuple<int&>(result));
     REQUIRE(result == 0);

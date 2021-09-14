@@ -21,99 +21,13 @@ namespace lite
         return f(msgpack::type::get<0>(tuple_));
     }
 
-    template<typename F, BOOST_PP_REPEAT(2, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(2, BOOST_PP_TYPE, T))) apply(F f, msgpack::type::tuple<BOOST_PP_REPEAT(2, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(2, APPLY_MSGPACK_GET, tuple_));
+#ifndef APPLY_MSGPACK_TUPLE
+#  define APPLY_MSGPACK_TUPLE(z, n, _) \
+    template<typename F, BOOST_PP_REPEAT_Z(z, n, BOOST_PP_TYPENAME, T)> \
+    inline RESULT_OF_T(F(BOOST_PP_REPEAT_Z(z, n, BOOST_PP_TYPE, T))) apply(F f, const msgpack::type::tuple<BOOST_PP_REPEAT_Z(z, n, BOOST_PP_TYPE, T)>& tuple_) \
+    { \
+        return f(BOOST_PP_REPEAT_Z(z, n, APPLY_MSGPACK_GET, tuple_)); \
     }
-
-    template<typename F, BOOST_PP_REPEAT(2, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(2, BOOST_PP_TYPE, T))) apply(F f, const msgpack::type::tuple<BOOST_PP_REPEAT(2, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(2, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(3, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(3, BOOST_PP_TYPE, T))) apply(F f, msgpack::type::tuple<BOOST_PP_REPEAT(3, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(3, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(3, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(3, BOOST_PP_TYPE, T))) apply(F f, const msgpack::type::tuple<BOOST_PP_REPEAT(3, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(3, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(4, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(4, BOOST_PP_TYPE, T))) apply(F f, msgpack::type::tuple<BOOST_PP_REPEAT(4, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(4, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(4, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(4, BOOST_PP_TYPE, T))) apply(F f, const msgpack::type::tuple<BOOST_PP_REPEAT(4, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(4, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(5, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(5, BOOST_PP_TYPE, T))) apply(F f, msgpack::type::tuple<BOOST_PP_REPEAT(5, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(5, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(5, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(5, BOOST_PP_TYPE, T))) apply(F f, const msgpack::type::tuple<BOOST_PP_REPEAT(5, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(5, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(6, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(6, BOOST_PP_TYPE, T))) apply(F f, msgpack::type::tuple<BOOST_PP_REPEAT(6, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(6, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(6, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(6, BOOST_PP_TYPE, T))) apply(F f, const msgpack::type::tuple<BOOST_PP_REPEAT(6, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(6, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(7, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(7, BOOST_PP_TYPE, T))) apply(F f, msgpack::type::tuple<BOOST_PP_REPEAT(7, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(7, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(7, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(7, BOOST_PP_TYPE, T))) apply(F f, const msgpack::type::tuple<BOOST_PP_REPEAT(7, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(7, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(8, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(8, BOOST_PP_TYPE, T))) apply(F f, msgpack::type::tuple<BOOST_PP_REPEAT(8, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(8, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(8, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(8, BOOST_PP_TYPE, T))) apply(F f, const msgpack::type::tuple<BOOST_PP_REPEAT(8, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(8, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(9, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(9, BOOST_PP_TYPE, T))) apply(F f, msgpack::type::tuple<BOOST_PP_REPEAT(9, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(9, APPLY_MSGPACK_GET, tuple_));
-    }
-
-    template<typename F, BOOST_PP_REPEAT(9, BOOST_PP_TYPENAME, T)>
-    inline RESULT_OF_T(F(BOOST_PP_REPEAT(9, BOOST_PP_TYPE, T))) apply(F f, const msgpack::type::tuple<BOOST_PP_REPEAT(9, BOOST_PP_TYPE, T)>& tuple_)
-    {
-        return f(BOOST_PP_REPEAT(9, APPLY_MSGPACK_GET, tuple_));
-    }
+    BOOST_PP_REPEAT_FROM_TO(2, 10, APPLY_MSGPACK_TUPLE, _)
+#endif
 }

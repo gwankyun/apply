@@ -9,36 +9,36 @@
 #    define APPLY_HAS_CXX_11 1
 #  else
 #    define APPLY_HAS_CXX_11 0
-#  endif // __cplusplus >= 201103L || (defined(__cpp_variadic_templates) && defined(__cpp_rvalue_references))
-#endif // !APPLY_HAS_CXX_11
+#  endif
+#endif
 
 #ifndef APPLY_HAS_CXX_17
 #  if APPLY_HAS_CXX_11 && (__cplusplus >= 201703L || (defined(__cpp_lib_type_trait_variable_templates)))
 #    define APPLY_HAS_CXX_17 1
 #  else
 #    define APPLY_HAS_CXX_17 0
-#  endif // APPLY_HAS_CXX_11 && (__cplusplus >= 201703L || (defined(__cpp_lib_type_trait_variable_templates)))
-#endif // !APPLY_HAS_CXX_17
+#  endif
+#endif
 
 #if APPLY_HAS_CXX_11
 #  include <type_traits>
-#endif // APPLY_HAS_CXX_11
+#endif
 
 #ifndef APPLY_ENABLE_MSGPACK_TUPLE
 #  define APPLY_ENABLE_MSGPACK_TUPLE 1
-#endif // !APPLY_ENABLE_MSGPACK_TUPLE
+#endif
 
 #ifndef APPLY_ENABLE_BOOST_TUPLE
 #  define APPLY_ENABLE_BOOST_TUPLE 1
-#endif // !APPLY_ENABLE_BOOST_TUPLE
+#endif
 
 #ifndef APPLY_ENABLE_BOOST_ARRAY
 #  define APPLY_ENABLE_BOOST_ARRAY 1
-#endif // !APPLY_ENABLE_BOOST_ARRAY
+#endif
 
 #ifndef RESULT_OF_T
 #  define RESULT_OF_T(f) typename boost::result_of<f>::type
-#endif // !RESULT_OF_T 
+#endif
 
 namespace lite
 {
@@ -50,16 +50,16 @@ namespace lite
 
 #ifndef VOID_T
 #  define VOID_T typename void_t::type
-#endif // !VOID_T
+#endif
 
 #ifndef ENABLE_IF_T
 #  define ENABLE_IF_T(c, t) typename boost::enable_if_<c, t>::type
-#endif // !ENABLE_IF_T
+#endif
 
 #ifndef IS_SAME_V
 #  if APPLY_HAS_CXX_11
 #    define IS_SAME_V(a, b) std::is_same<a, b>::value
 #  else
 #    define IS_SAME_V(a, b) boost::is_same<a, b>::value
-#  endif // APPLY_HAS_CXX_11
-#endif // !IS_SAME_V
+#  endif
+#endif

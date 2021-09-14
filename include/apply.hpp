@@ -1,28 +1,31 @@
 #pragma once
 #include <utility>
 #include "apply/common.hpp"
-#include "apply/tuple.hpp"
-#include "apply/array.hpp"
+
+#if APPLY_HAS_CXX_11
+#  include "apply/tuple.hpp"
+#  include "apply/array.hpp"
+#endif
 
 #if APPLY_ENABLE_MSGPACK_TUPLE
 #  include "apply/msgpack_tuple.hpp"
-#endif // APPLY_ENABLE_MSGPACK_TUPLE
+#endif
 
 #if APPLY_ENABLE_BOOST_TUPLE
 #  include "apply/boost_tuple.hpp"
-#endif // APPLY_ENABLE_BOOST_TUPLE
+#endif
 
 #if APPLY_ENABLE_BOOST_ARRAY
 #  include "apply/boost_array.hpp"
-#endif // APPLY_ENABLE_BOOST_ARRAY
+#endif
 
 #ifndef RVALUE_REF
 #  if __cpp_rvalue_references
 #    define RVALUE_REF(x) x &&
 #  else
 #    define RVALUE_REF(x) x
-#  endif // __cpp_rvalue_references
-#endif // !RVALUE_REF
+#  endif
+#endif
 
 namespace lite
 {
@@ -33,7 +36,7 @@ namespace lite
         using type = T&&;
 #else
         typedef T type;
-#endif // __cpp_rvalue_references
+#endif
     };
 
 #if APPLY_HAS_CXX_11
@@ -50,5 +53,5 @@ namespace lite
     {
         return f(pr.first, pr.second);
     }
-#endif // APPLY_HAS_CXX_11
+#endif
 }
