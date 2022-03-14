@@ -81,6 +81,6 @@ if(Catch2_FOUND)
   target_sources(${test}
     PRIVATE src/test.cpp)
   target_link_libraries(${test} PUBLIC
-    Catch2::Catch2 apply)
+    Catch2::Catch2WithMain apply)
   target_compile_features(${test} PRIVATE cxx_std_17)
 endif()

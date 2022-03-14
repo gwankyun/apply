@@ -40,6 +40,11 @@
 #  define RESULT_OF_T(f) typename boost::result_of<f>::type
 #endif
 
+#ifndef BOOST_PP_REPEAT_FROM_TO_Z 
+#  define BOOST_PP_REPEAT_FROM_TO_Z(z, first, last, macro, data) \
+    BOOST_PP_CAT(BOOST_PP_REPEAT_FROM_TO_, z)(first, last, macro, data)
+#endif
+
 namespace lite
 {
     struct void_t
