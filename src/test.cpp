@@ -200,12 +200,7 @@ TEST_CASE("std::tuple", "[lite::apply]")
     REQUIRE(lite::apply(f1, std::make_tuple(1)) == 1);
     REQUIRE(lite::apply(f2, std::make_tuple(1, 2)) == 3);
     REQUIRE(lite::apply(f3, std::make_tuple(1, 2, 3)) == 6);
-    REQUIRE(lite::apply(f4, std::make_tuple(1, 2, 3, 4)) == 10);
-    REQUIRE(lite::apply(f5, std::make_tuple(1, 2, 3, 4, 5)) == 15);
-    REQUIRE(lite::apply(f6, std::make_tuple(1, 2, 3, 4, 5, 6)) == 21);
-    REQUIRE(lite::apply(f7, std::make_tuple(1, 2, 3, 4, 5, 6, 7)) == 28);
-    REQUIRE(lite::apply(f8, std::make_tuple(1, 2, 3, 4, 5, 6, 7, 8)) == 36);
-    REQUIRE(lite::apply(f9, std::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
+
     int result = 100;
     lite::apply(g1, std::tuple<int&>(result));
     REQUIRE(result == 0);
@@ -213,6 +208,15 @@ TEST_CASE("std::tuple", "[lite::apply]")
     REQUIRE(result == 1);
     lite::apply(g3, std::tuple<int&, int, int>(result, 1, 2));
     REQUIRE(result == 3);
+
+#if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+    REQUIRE(lite::apply(f4, std::make_tuple(1, 2, 3, 4)) == 10);
+    REQUIRE(lite::apply(f5, std::make_tuple(1, 2, 3, 4, 5)) == 15);
+    REQUIRE(lite::apply(f6, std::make_tuple(1, 2, 3, 4, 5, 6)) == 21);
+    REQUIRE(lite::apply(f7, std::make_tuple(1, 2, 3, 4, 5, 6, 7)) == 28);
+    REQUIRE(lite::apply(f8, std::make_tuple(1, 2, 3, 4, 5, 6, 7, 8)) == 36);
+    REQUIRE(lite::apply(f9, std::make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9)) == 45);
+
     lite::apply(g4, std::tuple<int&, int, int, int>(result, 1, 2, 3));
     REQUIRE(result == 6);
     lite::apply(g5, std::tuple<int&, int, int, int, int>(result, 1, 2, 3, 4));
@@ -225,6 +229,7 @@ TEST_CASE("std::tuple", "[lite::apply]")
     REQUIRE(result == 28);
     lite::apply(g9, std::tuple<int&, int, int, int, int, int, int, int, int>(result, 1, 2, 3, 4, 5, 6, 7, 8));
     REQUIRE(result == 36);
+#endif
 }
 
 TEST_CASE("std::array", "[lite::apply]")
@@ -235,6 +240,13 @@ TEST_CASE("std::array", "[lite::apply]")
     REQUIRE(lite::apply(f2, a2) == 3);
     std::array<int, 3> a3{ 1, 2, 3 };
     REQUIRE(lite::apply(f3, a3) == 6);
+    lite::apply(h1, a1);
+    REQUIRE(g_result == 1);
+    lite::apply(h2, a2);
+    REQUIRE(g_result == 3);
+    lite::apply(h3, a3);
+    REQUIRE(g_result == 6);
+#if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
     std::array<int, 4> a4{ 1, 2, 3, 4 };
     REQUIRE(lite::apply(f4, a4) == 10);
     std::array<int, 5> a5{ 1, 2, 3, 4, 5 };
@@ -247,12 +259,6 @@ TEST_CASE("std::array", "[lite::apply]")
     REQUIRE(lite::apply(f8, a8) == 36);
     std::array<int, 9> a9{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     REQUIRE(lite::apply(f9, a9) == 45);
-    lite::apply(h1, a1);
-    REQUIRE(g_result == 1);
-    lite::apply(h2, a2);
-    REQUIRE(g_result == 3);
-    lite::apply(h3, a3);
-    REQUIRE(g_result == 6);
     lite::apply(h4, a4);
     REQUIRE(g_result == 10);
     lite::apply(h5, a5);
@@ -265,6 +271,7 @@ TEST_CASE("std::array", "[lite::apply]")
     REQUIRE(g_result == 36);
     lite::apply(h9, a9);
     REQUIRE(g_result == 45);
+#endif
 }
 
 TEST_CASE("boost::array", "[lite::apply]")
@@ -276,6 +283,13 @@ TEST_CASE("boost::array", "[lite::apply]")
     boost::array<int, 3> a3{ 1, 2, 3 };
     REQUIRE(lite::apply(f3, a3) == 6);
     boost::array<int, 4> a4{ 1, 2, 3, 4 };
+    lite::apply(h1, a1);
+    REQUIRE(g_result == 1);
+    lite::apply(h2, a2);
+    REQUIRE(g_result == 3);
+    lite::apply(h3, a3);
+    REQUIRE(g_result == 6);
+#if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
     REQUIRE(lite::apply(f4, a4) == 10);
     boost::array<int, 5> a5{ 1, 2, 3, 4, 5 };
     REQUIRE(lite::apply(f5, a5) == 15);
@@ -287,12 +301,6 @@ TEST_CASE("boost::array", "[lite::apply]")
     REQUIRE(lite::apply(f8, a8) == 36);
     boost::array<int, 9> a9{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     REQUIRE(lite::apply(f9, a9) == 45);
-    lite::apply(h1, a1);
-    REQUIRE(g_result == 1);
-    lite::apply(h2, a2);
-    REQUIRE(g_result == 3);
-    lite::apply(h3, a3);
-    REQUIRE(g_result == 6);
     lite::apply(h4, a4);
     REQUIRE(g_result == 10);
     lite::apply(h5, a5);
@@ -305,6 +313,7 @@ TEST_CASE("boost::array", "[lite::apply]")
     REQUIRE(g_result == 36);
     lite::apply(h9, a9);
     REQUIRE(g_result == 45);
+#endif
 }
 
 TEST_CASE("std::tuple mutable", "[lite::apply]")

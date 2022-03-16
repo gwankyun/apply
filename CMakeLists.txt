@@ -63,9 +63,17 @@ target_sources(${apply} PRIVATE
   src/main.cpp
   include/apply.hpp
   include/apply/tuple.hpp
+  include/apply/tuple_base.hpp
+  include/apply/tuple_ext.hpp
   include/apply/msgpack_tuple.hpp
+  include/apply/msgpack_tuple_base.hpp
+  include/apply/msgpack_tuple_ext.hpp
   include/apply/boost_tuple.hpp
+  include/apply/boost_tuple_base.hpp
+  include/apply/boost_tuple_ext.hpp
   include/apply/boost_array.hpp
+  include/apply/boost_array_base.hpp
+  include/apply/boost_array_ext.hpp
   include/apply/array.hpp
   include/apply/common.hpp
   cmake/Findapply.cmake)

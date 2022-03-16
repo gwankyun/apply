@@ -40,6 +40,14 @@
 #  define RESULT_OF_T(f) typename boost::result_of<f>::type
 #endif
 
+#  ifndef APPLY_STD_GET
+#    define APPLY_STD_GET(z, n, x) BOOST_PP_COMMA_IF(n) std::get<n>(x)
+#  endif
+
+#  ifndef APPLY_ARRAY_TYPE
+#    define APPLY_ARRAY_TYPE(z, n, x) x
+#  endif
+
 #ifndef BOOST_PP_REPEAT_FROM_TO_Z 
 #  define BOOST_PP_REPEAT_FROM_TO_Z(z, first, last, macro, data) \
     BOOST_PP_CAT(BOOST_PP_REPEAT_FROM_TO_, z)(first, last, macro, data)
