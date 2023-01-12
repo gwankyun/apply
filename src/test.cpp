@@ -2,8 +2,11 @@
 #include <array>
 #include <utility>
 #include <type_traits>
-#include <catch2/catch_all.hpp>
-#include <msgpack.hpp>
+#include <catch2/../catch2/catch_session.hpp>
+#include <catch2/catch_test_macros.hpp>
+#ifndef APPLY_MSGPACKC_CXX
+#  include <msgpack.hpp>
+#endif
 #include <boost/tuple/tuple.hpp>
 #ifndef APPLY_HAS_BOOST_PREPROCESSOR
 #  define APPLY_HAS_BOOST_PREPROCESSOR 1
@@ -160,6 +163,13 @@ void add1(int& a, int& b)
     b += 1;
 }
 
+int main(int argc, char* argv[])
+{
+    auto result = Catch::Session().run(argc, argv);
+    return result;
+}
+
+#if APPLY_MSGPACKC_CXX
 TEST_CASE("msgpack::type::tuple", "[lite::apply]")
 {
     REQUIRE(lite::apply(f1, msgpack::type::make_tuple(1)) == 1);
@@ -172,7 +182,8 @@ TEST_CASE("msgpack::type::tuple", "[lite::apply]")
     REQUIRE(result == 1);
     lite::apply(g3, msgpack::type::tuple<int&, int, int>(result, 1, 2));
     REQUIRE(result == 3);
-#if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+// #if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+#if defined(APPLY_PREPROCESSOR) && APPLY_PREPROCESSOR
     REQUIRE(lite::apply(f4, msgpack::type::make_tuple(1, 2, 3, 4)) == 10);
     REQUIRE(lite::apply(f5, msgpack::type::make_tuple(1, 2, 3, 4, 5)) == 15);
     REQUIRE(lite::apply(f6, msgpack::type::make_tuple(1, 2, 3, 4, 5, 6)) == 21);
@@ -193,6 +204,7 @@ TEST_CASE("msgpack::type::tuple", "[lite::apply]")
     REQUIRE(result == 36);
 #endif
 }
+#endif
 
 #if APPLY_HAS_CXX_11
 TEST_CASE("std::tuple", "[lite::apply]")
@@ -209,7 +221,8 @@ TEST_CASE("std::tuple", "[lite::apply]")
     lite::apply(g3, std::tuple<int&, int, int>(result, 1, 2));
     REQUIRE(result == 3);
 
-#if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+// #if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+#if defined(APPLY_PREPROCESSOR) && APPLY_PREPROCESSOR
     REQUIRE(lite::apply(f4, std::make_tuple(1, 2, 3, 4)) == 10);
     REQUIRE(lite::apply(f5, std::make_tuple(1, 2, 3, 4, 5)) == 15);
     REQUIRE(lite::apply(f6, std::make_tuple(1, 2, 3, 4, 5, 6)) == 21);
@@ -246,7 +259,8 @@ TEST_CASE("std::array", "[lite::apply]")
     REQUIRE(g_result == 3);
     lite::apply(h3, a3);
     REQUIRE(g_result == 6);
-#if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+// #if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+#if defined(APPLY_PREPROCESSOR) && APPLY_PREPROCESSOR
     std::array<int, 4> a4{ 1, 2, 3, 4 };
     REQUIRE(lite::apply(f4, a4) == 10);
     std::array<int, 5> a5{ 1, 2, 3, 4, 5 };
@@ -289,7 +303,8 @@ TEST_CASE("boost::array", "[lite::apply]")
     REQUIRE(g_result == 3);
     lite::apply(h3, a3);
     REQUIRE(g_result == 6);
-#if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+// #if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+#if defined(APPLY_PREPROCESSOR) && APPLY_PREPROCESSOR
     REQUIRE(lite::apply(f4, a4) == 10);
     boost::array<int, 5> a5{ 1, 2, 3, 4, 5 };
     REQUIRE(lite::apply(f5, a5) == 15);
@@ -345,7 +360,8 @@ TEST_CASE("boost::tuple", "[lite::apply]")
     lite::apply(g3, boost::tuple<int&, int, int>(result, 1, 2));
     REQUIRE(result == 3);
 
-#if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+// #if defined(APPLY_HAS_BOOST_PREPROCESSOR) && APPLY_HAS_BOOST_PREPROCESSOR
+#if defined(APPLY_PREPROCESSOR) && APPLY_PREPROCESSOR
     REQUIRE(lite::apply(f4, boost::make_tuple(1, 2, 3, 4)) == 10);
     REQUIRE(lite::apply(f5, boost::make_tuple(1, 2, 3, 4, 5)) == 15);
     REQUIRE(lite::apply(f6, boost::make_tuple(1, 2, 3, 4, 5, 6)) == 21);
@@ -382,6 +398,7 @@ TEST_CASE("boost::tuple mutable", "[lite::apply]")
     REQUIRE(b == 2);
 }
 
+#if APPLY_MSGPACKC_CXX
 TEST_CASE("msgpace::type::tuple mutable", "[lite::apply]")
 {
     int a = 0;
@@ -390,3 +407,4 @@ TEST_CASE("msgpace::type::tuple mutable", "[lite::apply]")
     REQUIRE(a == 1);
     REQUIRE(b == 2);
 }
+#endif

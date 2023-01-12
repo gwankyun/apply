@@ -7,7 +7,7 @@
 #  include "apply/array.hpp"
 #endif
 
-#if APPLY_ENABLE_MSGPACK_TUPLE
+#if APPLY_MSGPACKC_CXX
 #  include "apply/msgpack_tuple.hpp"
 #endif
 

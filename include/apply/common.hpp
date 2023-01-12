@@ -1,7 +1,24 @@
 #pragma once
 #include <boost/utility/result_of.hpp> // boost::result_of
-#include <preprocessor.hpp> // BOOST_PP_*
-#include <has_include.hpp>
+
+#ifndef APPLY_PREPROCESSOR
+#  define APPLY_PREPROCESSOR 0
+#endif
+
+#ifndef APPLY_HAS_INCLUDE
+#  define APPLY_HAS_INCLUDE 0
+#endif
+
+#if APPLY_PREPROCESSOR
+#  include <preprocessor.hpp> // BOOST_PP_*
+#endif
+
+#if APPLY_HAS_INCLUDE
+#  include <has_include.hpp>
+#else
+#  define HAS_INCLUDE(x) 1
+#endif
+
 #include <boost/type_traits.hpp>
 
 #ifndef APPLY_HAS_CXX_11
